@@ -6,15 +6,24 @@ APP_DIR="tracker-app"
 
 echo "🚀 Starting deployment of Tracker App..."
 
-# 1. Clone or Update
-if [ -d "$APP_DIR" ]; then
-    echo "📂 App directory exists, pulling latest changes..."
-    cd $APP_DIR
+# 1. Detect if we are already in the repo
+if [ -f "package.json" ]; then
+    echo "📂 Already inside the app directory, pulling latest changes..."
     git pull origin master
 else
-    echo "📥 Cloning repository..."
-    git clone $REPO_URL $APP_DIR
-    cd $APP_DIR
+    # Configuration
+    REPO_URL="https://github.com/xavieralwin/tracker-app.git"
+    APP_DIR="tracker-app"
+    
+    if [ -d "$APP_DIR" ]; then
+        echo "📂 App directory exists, entering and pulling..."
+        cd "$APP_DIR"
+        git pull origin master
+    else
+        echo "📥 Cloning repository..."
+        git clone "$REPO_URL" "$APP_DIR"
+        cd "$APP_DIR"
+    fi
 fi
 
 # 2. Install Dependencies
